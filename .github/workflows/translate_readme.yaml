@@ -33,3 +33,5 @@ jobs:
           git add README.ja.md
           git commit -m "Add translated README (Japanese)"
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
