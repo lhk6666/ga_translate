@@ -21,6 +21,8 @@ jobs:
       - name: Install dependencies
         run: |
           pip install googletrans==4.0.0-rc1  # 翻訳ライブラリをインストール
+          pip install markdown
+          pip install html2text
 
       - name: Translate README
         run: |
