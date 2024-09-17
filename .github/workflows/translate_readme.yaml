@@ -23,6 +23,7 @@ jobs:
           pip install googletrans==4.0.0-rc1  # 翻訳ライブラリをインストール
           pip install markdown
           pip install html2text
+          pip install beautifulsoup4
 
       - name: Translate README
         run: |
