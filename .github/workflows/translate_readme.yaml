@@ -1,0 +1,35 @@
+name: Translate README to Japanese
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          pip install googletrans==4.0.0-rc1  # 翻訳ライブラリをインストール
+
+      - name: Translate README
+        run: |
+          python translate_readme.py
+
+      - name: Commit translated README
+        run: |
+          git config --local user.name "github-actions"
+          git config --local user.email "github-actions@github.com"
+          git add README.ja.md
+          git commit -m "Add translated README (Japanese)"
+          git push
