@@ -1,40 +1,53 @@
 import markdown
 from bs4 import BeautifulSoup
-from googletrans import Translator
-import html2text  # HTML を Markdown に変換するために必要
+import html2text
+from openai import OpenAI
+from langdetect import detect
 
-# README.mdを読み込む
+openai = OpenAI()
+updating_model = "gpt-4"
+
+def gpt_translate(text):
+    messages = [
+        {"role": "system", "content": "You are a professional translator for the README.md file. Please overlook it when the contain is code. Do not any prefix in your reply"},
+        {"role": "system", "content": "Translate English to Japanese, Japanese to English"},
+        {"role": "user", "content": f"Translate the following text to Japanese or English:\n\n{text}"},
+    ]
+    
+    response = openai.chat.completions.create(
+                model=updating_model,
+                messages= messages,
+                temperature = 0.1
+            )
+    
+    translated_text = response.choices[0].message.content
+    print(translated_text)
+    return translated_text
+
 with open('README.md', 'r', encoding='utf-8') as file:
     readme_content = file.read()
 
-# MarkdownをHTMLに変換
 html_content = markdown.markdown(readme_content)
 
-# BeautifulSoupを使ってHTMLからテキストを抽出しつつ、タグは保持
 soup = BeautifulSoup(html_content, 'html.parser')
 
-# 翻訳インスタンスの生成
-translator = Translator()
-
 def translate_element(element):
-    """タグ内のテキストを翻訳する"""
-    if element.string and element.string.strip():  # None もしくは空白のみのテキストを除外
-        translated = translator.translate(element.string, src='en', dest='ja').text
+    if element.string and element.string.strip():
+        translated = gpt_translate(element.string)
         element.string.replace_with(translated)
 
-# HTMLの各要素を再帰的に翻訳
 for elem in soup.find_all(text=True):
-    if elem.parent.name not in ['code', 'pre']:  # コードブロックは翻訳しない
+    if elem.parent.name not in ['code', 'pre']:  
         translate_element(elem)
 
-# BeautifulSoupオブジェクトをHTML文字列に変換
 translated_html = str(soup)
-
-# html2text を使ってHTMLをMarkdownに変換
 markdown_converter = html2text.HTML2Text()
-markdown_converter.ignore_links = False  # リンクを保持する
+markdown_converter.ignore_links = False
 translated_markdown = markdown_converter.handle(translated_html)
 
-# 翻訳結果をREADME.ja.mdとして保存
-with open('README.ja.md', 'w', encoding='utf-8') as file:
+with open(f'README.{detect(translated_markdown)}.md', 'w', encoding='utf-8') as file:
     file.write(translated_markdown)
+
+with open(f'README.{detect(readme_content)}.md', 'w', encoding='utf-8') as file:
+    file.write(readme_content)
+
