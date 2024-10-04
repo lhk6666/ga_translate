@@ -24,6 +24,7 @@ jobs:
           pip install bs4
           pip install html2text
           pip install langdetect
+          pip install os
 
       - name: Translate README
         env:

@@ -3,8 +3,10 @@ from bs4 import BeautifulSoup
 import html2text
 from openai import OpenAI
 from langdetect import detect
+import os
 
 openai = OpenAI()
+openai.api_key = os.getenv('OPENAI_API_KEY')
 updating_model = "gpt-4"
 
 def gpt_translate(text):
