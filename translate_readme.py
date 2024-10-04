@@ -10,7 +10,13 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 updating_model = "gpt-4"
 history =[]
 
+def truncate_history(history, max_history_length=5):
+    if len(history) > max_history_length:
+        history = history[-max_history_length:]
+    return history
+
 def gpt_translate(text):
+    truncate_history(history)
     messages = [
         {"role": "system", "content": "You are a professional translator for the README.md file. Please overlook it when the contain is code or url or special name. Do not any prefix in your reply"},
         {"role": "system", "content": "Normally, Translate English to Japanese, Japanese to English"},
