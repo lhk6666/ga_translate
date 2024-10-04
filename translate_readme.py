@@ -8,7 +8,7 @@ import os
 openai = OpenAI()
 openai.api_key = os.getenv('OPENAI_API_KEY')
 updating_model = "gpt-4"
-global history
+history =[]
 
 def gpt_translate(text):
     messages = [
@@ -25,6 +25,7 @@ def gpt_translate(text):
             )
     
     translated_text = response.choices[0].message.content
+    history.append(translated_text)
     print(translated_text)
     return translated_text
 
