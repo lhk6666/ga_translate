@@ -7,7 +7,7 @@ import os
 
 openai = OpenAI()
 openai.api_key = os.getenv('OPENAI_API_KEY')
-updating_model = "gpt-4"
+updating_model = "gpt-4o"
 history =[]
 
 def truncate_history(history, max_history_length=5):
