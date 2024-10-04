@@ -26,6 +26,8 @@ jobs:
           pip install langdetect
 
       - name: Translate README
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           python translate_readme.py
 
