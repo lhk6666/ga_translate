@@ -38,6 +38,7 @@ jobs:
           git config --local user.name "github-actions"
           git config --local user.email "github-actions@github.com"
           git add README.ja.md
+          git add README.en.md
           git commit -m "Add translated README"
           git push
         env:
