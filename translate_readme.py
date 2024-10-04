@@ -8,11 +8,13 @@ import os
 openai = OpenAI()
 openai.api_key = os.getenv('OPENAI_API_KEY')
 updating_model = "gpt-4"
+global history
 
 def gpt_translate(text):
     messages = [
-        {"role": "system", "content": "You are a professional translator for the README.md file. Please overlook it when the contain is code. Do not any prefix in your reply"},
-        {"role": "system", "content": "Translate English to Japanese, Japanese to English"},
+        {"role": "system", "content": "You are a professional translator for the README.md file. Please overlook it when the contain is code or url or special name. Do not any prefix in your reply"},
+        {"role": "system", "content": "Normally, Translate English to Japanese, Japanese to English"},
+        {"role": "system", "content": f"Accord to the history: {history}. Keep the md file use one language"},
         {"role": "user", "content": f"Translate the following text to Japanese or English:\n\n{text}"},
     ]
     
