@@ -30,6 +30,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+          echo $OPENAI_API_KEY
           python translate_readme.py
 
       - name: Commit translated README
