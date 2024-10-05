@@ -77,4 +77,4 @@ $ roslaunch jsk_uav_forest_common result.launch
 
 default data is the result from the gazebo.
 
-## This md file have no connect with the function of this actions script (Just for test).
+## This md file have no connect with the function of this actions script (Just for Test).
