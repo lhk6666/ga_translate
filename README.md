@@ -8,7 +8,7 @@ This is the repository for the uav challenge in forest:
 ![](jsk_uav_forest_common/images/demo.gif)
 
 
-## how to compile
+## How to compile
 
 ```
 mkdir <catkin_ws>
@@ -21,7 +21,7 @@ rosdep install -y -r --from-paths src --ignore-src --rosdistro $ROS_DISTRO
 catkin build
 ```
 
-## how to run program in simulation
+## How to run program in simulation
 
 - run in gazebo by autonomous perception and motion
 1. task1 
@@ -47,7 +47,7 @@ $ roslaunch jsk_uav_forest_simulation forest_simulation.launch manual:=true
 use terminal to operate the quadrotor
 
 
-## forest challenge (using DJI M100 + DJI Guidance + Pointgrey Chameleon3 + Hokuyo UST20LX)
+## Forest challenge (using DJI M100 + DJI Guidance + Pointgrey Chameleon3 + Hokuyo UST20LX)
 1. integrated launch file in UAV
 ```
 $ roslaunch jsk_uav_forest_common challenge.launch (same options with the above cases according to different tasks)
@@ -70,9 +70,11 @@ $ roslaunch jsk_uav_forest_common communication2ground_station.launch UAV_IP:=10
 $ rostopic pub /task_start std_msgs/Empty "{}"
 ```
 
-## view the result
+## View the result
 ```
 $ roslaunch jsk_uav_forest_common result.launch
 ```
 
 default data is the result from the gazebo.
+
+## This md file have no connect with the function of this actions script, just for test.
