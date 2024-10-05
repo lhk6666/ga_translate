@@ -39,7 +39,7 @@ def gpt_translate(text):
 def gpt_detect_language(text):
     messages = [
         {"role": "system", "content": "You are a professional linguist."},
-        {"role": "system", "content": "Your output could be: en or jp. Do not include extra text"},
+        {"role": "system", "content": "Your output could be: en or ja. Do not include extra text"},
         {"role": "user", "content": f"Please identify the primary language of the following text:\n\n{text}"}
     ]
     
