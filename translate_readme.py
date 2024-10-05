@@ -7,7 +7,7 @@ import os
 
 openai = OpenAI()
 openai.api_key = os.getenv('OPENAI_API_KEY')
-updating_model = "gpt-4o-mini"
+updating_model = "gpt-4o"
 history =[]
 
 def truncate_history(history, max_history_length=5):
@@ -20,7 +20,8 @@ def gpt_translate(text):
     messages = [
         {"role": "system", "content": "You are a professional translator for the README.md file. Please overlook it when the contain is code or url or special name. Do not any prefix in your reply"},
         {"role": "system", "content": "Normally, Translate English to Japanese, Japanese to English"},
-        {"role": "system", "content": f"Accord to the history: {history}. Keep the md file use one language"},
+        {"role": "system", "content": f"This is the contains you already translated: {history}. Keep the md file use one language"},
+        {"role": "system", "content": "However, if this text I ask you to translate is same as the language used in the previous contains, you can keep the original text"},
         {"role": "user", "content": f"Translate the following text to Japanese or English:\n\n{text}"},
     ]
     
@@ -35,30 +36,39 @@ def gpt_translate(text):
     print(translated_text)
     return translated_text
 
+def gpt_detect_language(text):
+    messages = [
+        {"role": "system", "content": "You are a professional linguist."},
+        {"role": "system", "content": "Your output could be: en or jp. Do not include extra text"},
+        {"role": "user", "content": f"Please identify the primary language of the following text:\n\n{text}"}
+    ]
+    
+    response = openai.chat.completions.create(
+                model=updating_model,
+                messages= messages,
+                temperature = 0.1
+            )
+    
+    detected_language = response.choices[0].message.content
+    return detected_language
+
 with open('README.md', 'r', encoding='utf-8') as file:
-    readme_content = file.read()
+    readme_content = file.readlines()
 
-html_content = markdown.markdown(readme_content)
+translated_content = []
 
-soup = BeautifulSoup(html_content, 'html.parser')
+for line in readme_content:
+    if line.strip() and line.strip('```').strip():  
+        translated_line = gpt_translate(line)
+        translated_content.append(translated_line)
+    else:
+        translated_content.append(line) 
 
-def translate_element(element):
-    if element.string and element.string.strip():
-        translated = gpt_translate(element.string)
-        element.string.replace_with(translated)
+detected_language = gpt_detect_language(translated_content)
+with open(f'README.{detected_language}.md', 'w', encoding='utf-8') as file:
+    file.write("\n".join(translated_content))
 
-for elem in soup.find_all(text=True):
-    if elem.parent.name not in ['code', 'pre']:  
-        translate_element(elem)
-
-translated_html = str(soup)
-markdown_converter = html2text.HTML2Text()
-markdown_converter.ignore_links = False
-translated_markdown = markdown_converter.handle(translated_html)
-
-with open(f'README.{detect(translated_markdown)}.md', 'w', encoding='utf-8') as file:
-    file.write(translated_markdown)
-
-with open(f'README.{detect(readme_content)}.md', 'w', encoding='utf-8') as file:
+detected_language = gpt_detect_language(readme_content)
+with open(f'README.{detected_language}.md', 'w', encoding='utf-8') as file:
     file.write(readme_content)
 
