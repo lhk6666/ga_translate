@@ -70,5 +70,5 @@ with open(f'README.{detected_language}.md', 'w', encoding='utf-8') as file:
 
 detected_language = gpt_detect_language(readme_content)
 with open(f'README.{detected_language}.md', 'w', encoding='utf-8') as file:
-    file.write(readme_content)
+    file.write(''.join(readme_content))
 
